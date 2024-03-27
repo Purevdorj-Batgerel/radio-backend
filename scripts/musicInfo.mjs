@@ -1,6 +1,6 @@
-import walk from './fileWalker.mjs'
-import * as mm from 'music-metadata'
 import path from 'path'
+import * as mm from 'music-metadata'
+import walk from './fileWalker.mjs'
 
 export async function getMusicFiles(dir) {
   const result = []

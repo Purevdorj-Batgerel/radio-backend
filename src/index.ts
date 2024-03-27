@@ -3,9 +3,9 @@ import dotenv from 'dotenv'
 import Fastify from 'fastify'
 import fastifyWebsocket from '@fastify/websocket'
 
-import { websocketHandler } from './routes/websocket'
-import streamRouter from './routes/stream'
 import Radio from './radio'
+import streamRouter from './routes/stream'
+import { websocketHandler } from './routes/websocket'
 import { getAllSongs } from './db'
 
 dotenv.config()

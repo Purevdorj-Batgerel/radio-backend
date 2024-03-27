@@ -1,7 +1,7 @@
-import { PassThrough } from 'stream'
-import Throttle from 'throttle'
 import { createReadStream } from 'fs'
+import { PassThrough } from 'stream'
 import { v4 as uuidv4 } from 'uuid'
+import Throttle from 'throttle'
 import { Song } from './types'
 
 let instance: Radio
