@@ -33,4 +33,4 @@ dist
 next-env.d.ts
 
 
-radio.db
+*.db
