@@ -1,16 +1,18 @@
 import { PassThrough } from 'stream'
 import Throttle from 'throttle'
-import * as mm from 'music-metadata'
 import { createReadStream } from 'fs'
 import { v4 as uuidv4 } from 'uuid'
-import path from 'path'
+
+import { getAllSongs } from './db'
+
+import { Song } from './types'
 
 const sinks = new Map()
-const songs: string[] = []
-let currentSong: string = path.resolve(process.cwd(), 'songs', '1.mp3')
+let songs: Song[] = []
+let currentSong: Song
+let currentIndex = 0
 
 let instance: Radio
-
 class Radio {
   constructor() {
     if (instance) {
@@ -19,6 +21,7 @@ class Radio {
 
     instance = this
   }
+
   getInstance() {
     return this
   }
@@ -42,30 +45,40 @@ class Radio {
     }
   }
 
-  removeFromSongs(): string {
+  addToSongs(song: Song) {
+    songs.push(song)
+  }
+  removeFromSongs(): Song {
     return songs.splice(0, 1)[0]
   }
 
   async playLoop() {
-    currentSong = songs.length ? this.removeFromSongs() : currentSong
-    const bitRate = await this.getBitrate(currentSong!)
+    currentSong = songs[currentIndex]
+    currentIndex++
 
-    const songReadable = createReadStream(currentSong)
+    if (currentIndex >= songs.length) {
+      currentIndex = 0
+    }
+
+    const bitRate = currentSong.bitrate
+
+    const songReadable = createReadStream(currentSong.file_location)
     const throttleTransformable = new Throttle(bitRate! / 8)
 
     throttleTransformable
       .on('data', (chunk) => this.broadcastToEverySink(chunk))
-      .on('end', () => this.playLoop())
+      .on('end', () => {
+        this.playLoop()
+      })
 
     songReadable.pipe(throttleTransformable)
   }
 
-  async getBitrate(song: string) {
-    const metadata = await mm.parseFile(song)
-    return metadata.format.bitrate
-  }
-
   startStreaming() {
+    songs = getAllSongs()
+
+    console.log(songs.length)
+
     this.playLoop()
   }
 }

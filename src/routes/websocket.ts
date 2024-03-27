@@ -1,19 +1,24 @@
 import { FastifyInstance } from 'fastify'
 
 export async function websocketHandler(fastify: FastifyInstance) {
-  fastify.get('/ws', { websocket: true }, (connection, req) => {
-    connection.socket.on('open', () => {
-      connection.socket.send('Socket open')
-      console.log('Socket Open')
+  fastify.get('/ws', { websocket: true }, (ws, req) => {
+    console.log('ON CONNECTION')
+    ws.on('error', console.error)
+    ws.on('ping', console.log)
+    ws.on('pong', console.log)
+
+    ws.on('open', () => {
+      console.log('SOCKET ON OPEN')
+      ws.send('Socket open')
     })
 
-    connection.socket.on('message', (message) => {
-      connection.socket.send('Hello Fastify Websocket')
-      console.log('Socket Send message')
+    ws.on('message', (message) => {
+      console.log('SOCKET ON MESSAGE Socket Send message')
+      ws.send('Hello Fastify Websocket')
     })
 
-    connection.socket.on('close', () => {
-      console.log('Socket Closed')
+    ws.on('close', () => {
+      console.log('SOCKET ON CLOSE')
     })
   })
 }

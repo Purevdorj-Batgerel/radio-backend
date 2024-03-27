@@ -3,6 +3,7 @@ import fastifyWebsocket from '@fastify/websocket'
 
 import { websocketHandler } from './routes/websocket'
 import streamRouter from './routes/stream'
+import Radio from './radio'
 
 const fastify = Fastify({ logger: true })
 fastify.register(fastifyWebsocket)
@@ -16,7 +17,7 @@ fastify.listen({ port: 3000 }, (err, address) => {
     process.exit(1)
   }
 
-  // Radio.startStreaming()
+  Radio.startStreaming()
 
   console.log(`Server listening at ${address}`)
 })
