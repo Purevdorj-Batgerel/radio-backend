@@ -14,7 +14,8 @@
     "build:fast": "tsup src",
     "dev": "ts-node-dev ./src/index.ts",
     "test": "ava",
-    "coverage": "c8 ava"
+    "coverage": "c8 ava",
+    "db": "node scripts/index.mjs"
   },
   "author": {
     "name": "Purevdorj Batgerel",
@@ -34,6 +35,7 @@
   "dependencies": {
     "@fastify/websocket": "^10.0.1",
     "better-sqlite3": "^9.4.3",
+    "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
     "music-metadata": "^7.14.0",
     "throttle": "^1.0.3",
