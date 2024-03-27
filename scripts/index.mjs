@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import { createTables, dropTables, populateSongs } from './db.mjs'
 import { analyzeMusic, getMusicFiles } from './musicInfo.mjs'
 import path from 'path'
@@ -10,6 +12,6 @@ const data = await Promise.all(
   }),
 )
 
-// dropTables()
-// createTables()
-// populateSongs(data)
+dropTables()
+createTables()
+// populateSongs(data)`

@@ -9,8 +9,7 @@ export function dropTables() {
 }
 
 export function populateSongs(data) {
-  const db = new Database('radio.db', { verbose: console.log })
-  db.pragma('journal_mode = WAL')
+  const db = getDB()
 
   const insertSong = db.prepare(
     `INSERT INTO songs (
@@ -51,9 +50,21 @@ export function populateSongs(data) {
   db.close()
 }
 
-function execQueries(queries) {
-  const db = new Database('radio.db', { verbose: console.log })
+function getDB() {
+  if (!process.env.DB) {
+    throw new Error('DB not declared in the .env file')
+  }
+
+  const db = new Database(`${process.env.DB.trim()}.db`, {
+    verbose: console.log,
+  })
   db.pragma('journal_mode = WAL')
+
+  return db
+}
+
+function execQueries(queries) {
+  const db = getDB()
 
   queries.forEach((query) => {
     db.exec(query)

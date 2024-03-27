@@ -2,26 +2,25 @@ import { PassThrough } from 'stream'
 import Throttle from 'throttle'
 import { createReadStream } from 'fs'
 import { v4 as uuidv4 } from 'uuid'
-
-import { getAllSongs } from './db'
-
 import { Song } from './types'
-
-const sinks = new Map()
-let songs: Song[] = []
-let currentSong: Song
-let currentIndex = 0
 
 let instance: Radio
 class Radio {
+  private sinks
+  private songs: Song[]
+  private currentIndex: number
+
   constructor() {
     if (instance) {
       throw new Error('You can only create one instance!')
     }
 
     instance = this
-  }
 
+    this.sinks = new Map()
+    this.songs = []
+    this.currentIndex = 0
+  }
   getInstance() {
     return this
   }
@@ -29,35 +28,38 @@ class Radio {
   makeResponseSink() {
     const id = uuidv4()
     const responseSink = new PassThrough()
-    sinks.set(id, responseSink)
-    console.log('Sink Created. Total Sinks: ', sinks.size)
+    this.sinks.set(id, responseSink)
+
     return { id, responseSink }
   }
 
   removeResponseSink(id: string) {
-    sinks.delete(id)
-    console.log('Sink Deleted. Total Sinks: ', sinks.size)
+    this.sinks.delete(id)
   }
 
   broadcastToEverySink(chunk: any) {
-    for (const [, sink] of sinks) {
+    for (const [, sink] of this.sinks) {
       sink.write(chunk)
     }
   }
 
   addToSongs(song: Song) {
-    songs.push(song)
+    this.songs.push(song)
   }
   removeFromSongs(): Song {
-    return songs.splice(0, 1)[0]
+    return this.songs.splice(0, 1)[0]
   }
 
   async playLoop() {
-    currentSong = songs[currentIndex]
-    currentIndex++
+    if (this.songs.length === 0) {
+      return
+    }
 
-    if (currentIndex >= songs.length) {
-      currentIndex = 0
+    const currentSong = this.songs[this.currentIndex]
+    this.currentIndex++
+
+    if (this.currentIndex >= this.songs.length) {
+      this.currentIndex = 0
     }
 
     const bitRate = currentSong.bitrate
@@ -74,11 +76,8 @@ class Radio {
     songReadable.pipe(throttleTransformable)
   }
 
-  startStreaming() {
-    songs = getAllSongs()
-
-    console.log(songs.length)
-
+  startStreaming(songs: Song[] = []) {
+    this.songs = songs
     this.playLoop()
   }
 }
