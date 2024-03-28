@@ -32,19 +32,36 @@ export function populateSongs(data) {
       file_location,
     } = song
 
-    insertSong.run(
-      lossless ? 1 : 0,
-      sampleRate,
-      bitrate,
-      duration,
-      year,
-      album,
-      genre,
-      albumartist,
-      title,
-      artists,
-      file_location,
-    )
+    try {
+      insertSong.run(
+        lossless ? 1 : 0,
+        sampleRate,
+        bitrate,
+        duration,
+        year,
+        album,
+        genre,
+        albumartist,
+        title,
+        artists,
+        file_location,
+      )
+    } catch (err) {
+      console.log(err)
+      console.log(
+        lossless ? 1 : 0,
+        sampleRate,
+        bitrate,
+        duration,
+        year,
+        album,
+        genre,
+        albumartist,
+        title,
+        artists,
+        file_location,
+      )
+    }
   })
 
   db.close()
