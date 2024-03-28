@@ -4,11 +4,12 @@ import { v4 as uuidv4 } from 'uuid'
 import Throttle from 'throttle'
 import { Song } from './types'
 
+let songs: Song[] = []
+let currentIndex: number = 0
+
 let instance: Radio
 class Radio {
-  private sinks
-  private songs: Song[]
-  private currentIndex: number
+  private sinks: Map<string, PassThrough>
 
   constructor() {
     if (instance) {
@@ -18,8 +19,6 @@ class Radio {
     instance = this
 
     this.sinks = new Map()
-    this.songs = []
-    this.currentIndex = 0
   }
   getInstance() {
     return this
@@ -44,22 +43,22 @@ class Radio {
   }
 
   addToSongs(song: Song) {
-    this.songs.push(song)
+    songs.push(song)
   }
   removeFromSongs(): Song {
-    return this.songs.splice(0, 1)[0]
+    return songs.splice(0, 1)[0]
   }
 
   async playLoop() {
-    if (this.songs.length === 0) {
+    if (songs.length === 0) {
       return
     }
 
-    const currentSong = this.songs[this.currentIndex]
-    this.currentIndex++
+    const currentSong = songs[currentIndex]
+    currentIndex++
 
-    if (this.currentIndex >= this.songs.length) {
-      this.currentIndex = 0
+    if (currentIndex >= songs.length) {
+      currentIndex = 0
     }
 
     const bitRate = currentSong.bitrate
@@ -76,8 +75,8 @@ class Radio {
     songReadable.pipe(throttleTransformable)
   }
 
-  startStreaming(songs: Song[] = []) {
-    this.songs = songs
+  startStreaming(_songs: Song[] = []) {
+    songs = _songs
     this.playLoop()
   }
 }
