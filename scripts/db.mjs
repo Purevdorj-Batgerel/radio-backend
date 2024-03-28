@@ -18,7 +18,7 @@ export function populateSongs(data) {
   )
 
   data.forEach((song) => {
-    const {
+    let {
       lossless = 0,
       sampleRate,
       bitrate,
@@ -32,9 +32,25 @@ export function populateSongs(data) {
       file_location,
     } = song
 
+    if (typeof lossless !== 'number') {
+      lossless = lossless ? 1 : 0
+    }
+
+    if (Array.isArray(genre)) {
+      genre = genre.join(',')
+    }
+
+    if (Array.isArray(albumartist)) {
+      albumartist = albumartist.join(',')
+    }
+
+    if (Array.isArray(artists)) {
+      artists = artists.join(',')
+    }
+
     try {
       insertSong.run(
-        lossless ? 1 : 0,
+        lossless,
         sampleRate,
         bitrate,
         duration,
