@@ -48,13 +48,16 @@ class Radio {
   removeFromSongs(): Song {
     return songs.splice(0, 1)[0]
   }
+  getCurrentSong(): Song {
+    return songs[currentIndex]
+  }
 
   async playLoop() {
     if (songs.length === 0) {
       return
     }
 
-    const currentSong = songs[currentIndex]
+    const currentSong = this.getCurrentSong()
     currentIndex++
 
     if (currentIndex >= songs.length) {

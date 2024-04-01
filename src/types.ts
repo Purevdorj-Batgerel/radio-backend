@@ -12,3 +12,8 @@ export interface Song {
   artists: string
   file_location: string
 }
+
+export interface Message {
+  action: string
+  payload: any
+}

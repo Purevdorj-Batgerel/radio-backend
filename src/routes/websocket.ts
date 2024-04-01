@@ -1,4 +1,29 @@
 import { FastifyInstance } from 'fastify'
+import { RawData, WebSocket } from 'ws'
+import { Message } from '../types'
+import { GET_SONG_INFO } from '../actions'
+import Radio from '../radio'
+
+function toJSON(data: RawData): Message {
+  return JSON.parse(data.toString()) as Message
+}
+
+function messageHandler(ws: WebSocket, message: Message) {
+  console.log(message)
+  const { action, payload } = message
+
+  if (action === GET_SONG_INFO) {
+    const { album, albumartist, artists, genre, title, year } =
+      Radio.getCurrentSong()
+
+    ws.send(
+      JSON.stringify({
+        action,
+        payload: { album, albumartist, artists, genre, title, year },
+      }),
+    )
+  }
+}
 
 export async function websocketHandler(fastify: FastifyInstance) {
   fastify.get('/ws', { websocket: true }, (ws, req) => {
@@ -12,10 +37,7 @@ export async function websocketHandler(fastify: FastifyInstance) {
       ws.send('Socket open')
     })
 
-    ws.on('message', (message) => {
-      console.log('SOCKET ON MESSAGE Socket Send message')
-      ws.send('Hello Fastify Websocket')
-    })
+    ws.on('message', (message) => messageHandler(ws, toJSON(message)))
 
     ws.on('close', () => {
       console.log('SOCKET ON CLOSE')
