@@ -3,6 +3,9 @@ import { PassThrough } from 'stream'
 import { v4 as uuidv4 } from 'uuid'
 import Throttle from 'throttle'
 import { Song } from './types'
+import WSManager from './WSManager'
+
+import { GET_SONG_INFO } from './actions'
 
 let songs: Song[] = []
 let currentIndex: number = 0
@@ -76,6 +79,13 @@ class Radio {
       })
 
     songReadable.pipe(throttleTransformable)
+
+    const { album, albumartist, artists, genre, title, year } = currentSong
+
+    WSManager.broadcast({
+      action: GET_SONG_INFO,
+      payload: { album, albumartist, artists, genre, title, year },
+    })
   }
 
   startStreaming(_songs: Song[] = []) {

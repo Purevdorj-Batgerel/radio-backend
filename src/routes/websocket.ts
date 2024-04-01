@@ -3,13 +3,13 @@ import { RawData, WebSocket } from 'ws'
 import { Message } from '../types'
 import { GET_SONG_INFO } from '../actions'
 import Radio from '../radio'
+import WSManager from '../WSManager'
 
 function toJSON(data: RawData): Message {
   return JSON.parse(data.toString()) as Message
 }
 
 function messageHandler(ws: WebSocket, message: Message) {
-  console.log(message)
   const { action, payload } = message
 
   if (action === GET_SONG_INFO) {
@@ -27,7 +27,8 @@ function messageHandler(ws: WebSocket, message: Message) {
 
 export async function websocketHandler(fastify: FastifyInstance) {
   fastify.get('/ws', { websocket: true }, (ws, req) => {
-    console.log('ON CONNECTION')
+    const id = WSManager.addSocket(ws)
+
     ws.on('error', console.error)
     ws.on('ping', console.log)
     ws.on('pong', console.log)
@@ -40,7 +41,7 @@ export async function websocketHandler(fastify: FastifyInstance) {
     ws.on('message', (message) => messageHandler(ws, toJSON(message)))
 
     ws.on('close', () => {
-      console.log('SOCKET ON CLOSE')
+      WSManager.removeSocket(id)
     })
   })
 }
