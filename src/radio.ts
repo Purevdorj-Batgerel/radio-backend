@@ -3,7 +3,7 @@ import { PassThrough } from 'stream'
 import { v4 as uuidv4 } from 'uuid'
 import Throttle from 'throttle'
 import { Song } from './types'
-import WSManager from './WSManager'
+import wsManager from './wsManager'
 
 import { GET_SONG_INFO } from './actions'
 
@@ -61,11 +61,12 @@ class Radio {
     }
 
     const currentSong = this.getCurrentSong()
-    currentIndex++
+    // currentIndex++
 
-    if (currentIndex >= songs.length) {
-      currentIndex = 0
-    }
+    // if (currentIndex >= songs.length) {
+    //   currentIndex = 0
+    // }
+    currentIndex = Math.floor(Math.random() * songs.length)
 
     const bitRate = currentSong.bitrate
 
@@ -82,7 +83,7 @@ class Radio {
 
     const { album, albumartist, artists, genre, title, year } = currentSong
 
-    WSManager.broadcast({
+    wsManager.broadcast({
       action: GET_SONG_INFO,
       payload: { album, albumartist, artists, genre, title, year },
     })

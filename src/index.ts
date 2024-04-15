@@ -1,6 +1,8 @@
+import path from 'path'
 import dotenv from 'dotenv'
 
 import Fastify from 'fastify'
+import fastifyStatic from '@fastify/static'
 import fastifyWebsocket from '@fastify/websocket'
 
 import Radio from './radio'
@@ -18,6 +20,10 @@ if (!process.env.PORT) {
 }
 
 const fastify = Fastify({ logger: true })
+fastify.register(fastifyStatic, {
+  root: path.join(__dirname, '../', 'public'),
+  prefix: '/public/',
+})
 fastify.register(fastifyWebsocket)
 
 fastify.register(websocketHandler)
