@@ -13,6 +13,9 @@ MACHINE_TYPE=`uname -m`
 if [ ${MACHINE_TYPE} == 'x86_64' ]; then
   # 64-bit system
   FILENAME="libwebp-$VERSION-linux-x86-64.tar.gz"
+elif [ ${MACHINE_TYPE} == 'aarch64' ]; then
+  # 64-bit arm system
+  FILENAME="libwebp-$VERSION-linux-aarch64.tar.gz"
 else
   # 32-bit system
   FILENAME="libwebp-$VERSION-linux-x86-32.tar.gz"
@@ -26,7 +29,7 @@ cd $TMPDIR
 set -e
 curl $URL_BASE$FILENAME --output $FILENAME
 echo "installing..."
-tar xvzf --strip-components=1 $FILENAME
+tar xvzf $FILENAME --strip-components=1
 if [ -d ./bin ]; then
   cp ./bin/* /usr/bin/
 else
