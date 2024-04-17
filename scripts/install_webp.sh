@@ -26,7 +26,7 @@ cd $TMPDIR
 set -e
 curl $URL_BASE$FILENAME --output $FILENAME
 echo "installing..."
-tar --strip-components=1 -zxf $FILENAME
+tar xvzf --strip-components=1 $FILENAME
 if [ -d ./bin ]; then
   cp ./bin/* /usr/bin/
 else
