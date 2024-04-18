@@ -13,8 +13,9 @@ export function populateSongs(data) {
 
   const insertSong = db.prepare(
     `INSERT INTO songs (
-      lossless, sampleRate, bitrate, duration, year, album, genre, albumartist, title, artists, file_location
-    ) VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
+      lossless, sampleRate, bitrate, duration, year, album, genre,
+      albumArtist, title, artists, albumArt, fileLocation
+    ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
   )
 
   data.forEach((song) => {
@@ -26,10 +27,11 @@ export function populateSongs(data) {
       year = 0,
       album = '',
       genre = '',
-      albumartist = '',
+      albumArtist = '',
       title = '',
       artists = '',
-      file_location,
+      albumArt = '',
+      fileLocation,
     } = song
 
     if (typeof lossless !== 'number') {
@@ -40,8 +42,8 @@ export function populateSongs(data) {
       genre = genre.join(',')
     }
 
-    if (Array.isArray(albumartist)) {
-      albumartist = albumartist.join(',')
+    if (Array.isArray(albumArtist)) {
+      albumArtist = albumArtist.join(',')
     }
 
     if (Array.isArray(artists)) {
@@ -57,10 +59,11 @@ export function populateSongs(data) {
         year,
         album,
         genre,
-        albumartist,
+        albumArtist,
         title,
         artists,
-        file_location,
+        albumArt,
+        fileLocation,
       )
     } catch (err) {
       console.log(err)
@@ -72,10 +75,11 @@ export function populateSongs(data) {
         year,
         album,
         genre,
-        albumartist,
+        albumArtist,
         title,
         artists,
-        file_location,
+        albumArt,
+        fileLocation,
       )
     }
   })
@@ -113,14 +117,11 @@ function getDropTableQueries() {
   const albums = `
   DROP TABLE IF EXISTS albums
   `
-  const tracks = `
-  DROP TABLE IF EXISTS tracks
-  `
   const songs = `
   DROP TABLE IF EXISTS songs
   `
 
-  return [artists, albums, tracks, songs]
+  return [artists, albums, songs]
 }
 
 function getCreateTableQueries() {
@@ -134,21 +135,10 @@ function getCreateTableQueries() {
   CREATE TABLE IF NOT EXISTS albums (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title VARCHAR(255) NOT NULL,
-    artist_id INTEGER NOT NULL,
-    release_year INTEGER,
+    artistId INTEGER NOT NULL,
+    releaseYear INTEGER,
 
     FOREIGN KEY (artist_id) REFERENCES artists(id)
-  );`
-
-  const tracks = `
-  CREATE TABLE IF NOT EXISTS tracks (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title VARCHAR(255) NOT NULL,
-    album_id INTEGER NOT NULL,
-    duration INTEGER,
-    file_location VARCHAR(255),
-
-    FOREIGN KEY (album_id) REFERENCES albums(id)
   );`
 
   const songs = `
@@ -161,10 +151,11 @@ function getCreateTableQueries() {
     year INTEGER,
     album VARCHAR(255),
     genre VARCHAR(255),
-    albumartist VARCHAR(255),
+    albumArtist VARCHAR(255),
     title VARCHAR(255),
     artists VARCHAR(255),
-    file_location VARCHAR(255)
+    albumArt VARCHAR(255),
+    fileLocation VARCHAR(255)
   );
   `
 

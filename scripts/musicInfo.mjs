@@ -1,6 +1,8 @@
 import path from 'path'
 import * as mm from 'music-metadata'
-import walk from './fileWalker.mjs'
+import { walk } from './fileHelpers.mjs'
+import { CWebp } from 'cwebp'
+import crypto from 'crypto'
 
 export async function getMusicFiles(dir) {
   const result = []
@@ -14,7 +16,7 @@ export async function getMusicFiles(dir) {
   return result
 }
 
-export async function analyzeMusic(file) {
+async function analyzeMusic(file) {
   const metadata = await mm.parseFile(file)
 
   const formatted = {
@@ -35,5 +37,30 @@ export async function analyzeMusic(file) {
     formatted.title = path.basename(file, '.mp3')
   }
 
-  return formatted
+  return [formatted, metadata]
+}
+
+export async function processMusicFile(file) {
+  const [formatted, metadata] = await analyzeMusic(file)
+
+  const imageFile = await createImage(file, metadata)
+
+  return { ...formatted, albumArt: imageFile }
+}
+
+async function createImage(file, metadata) {
+  if (metadata.common?.picture?.[0]) {
+    const fileName =
+      crypto.createHash('md5').update(file).digest('hex') + '.webp'
+    const imagePath = path.resolve('public', fileName)
+
+    try {
+      const encoder = new CWebp(metadata.common.picture[0].data)
+      await encoder.write(imagePath)
+    } catch (err) {
+      console.log(err)
+    }
+
+    return fileName
+  }
 }
