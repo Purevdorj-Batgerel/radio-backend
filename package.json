@@ -27,7 +27,7 @@
     "url": "https://github.com/Purevdorj-Batgerel/radio-backend"
   },
   "license": "UNLICENSED",
-  "packageManager": "pnpm@8.15.7",
+  "packageManager": "pnpm@9.0.2",
   "engines": {
     "node": ">=20.5.1",
     "pnpm": ">=8.15.4"
@@ -36,6 +36,7 @@
     "@fastify/static": "^7.0.3",
     "@fastify/websocket": "^10.0.1",
     "better-sqlite3": "^9.5.0",
+    "cwebp": "^3.0.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
     "music-metadata": "^7.14.0",
