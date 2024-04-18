@@ -60,13 +60,13 @@ class Radio {
       return
     }
 
+    currentIndex = Math.floor(Math.random() * songs.length)
     const currentSong = this.getCurrentSong()
     // currentIndex++
 
     // if (currentIndex >= songs.length) {
     //   currentIndex = 0
     // }
-    currentIndex = Math.floor(Math.random() * songs.length)
 
     const bitRate = currentSong.bitrate
 
