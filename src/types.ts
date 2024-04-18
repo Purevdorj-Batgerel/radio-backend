@@ -7,10 +7,11 @@ export interface Song {
   year: number
   album: string
   genre: string
-  albumartist: string
+  albumArtist: string
   title: string
   artists: string
-  file_location: string
+  albumArt: string
+  fileLocation: string
 }
 
 export interface Message {

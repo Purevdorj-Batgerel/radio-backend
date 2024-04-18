@@ -62,16 +62,29 @@ class Radio {
 
     currentIndex = Math.floor(Math.random() * songs.length)
     const currentSong = this.getCurrentSong()
+
+    const {
+      album,
+      albumArtist,
+      artists,
+      genre,
+      title,
+      year,
+      albumArt,
+      fileLocation,
+      bitrate,
+    } = currentSong
+
     // currentIndex++
 
     // if (currentIndex >= songs.length) {
     //   currentIndex = 0
     // }
 
-    const bitRate = currentSong.bitrate
+    // console.log(fileLocation)
 
-    const songReadable = createReadStream(currentSong.file_location)
-    const throttleTransformable = new Throttle(bitRate! / 8)
+    const songReadable = createReadStream(fileLocation)
+    const throttleTransformable = new Throttle(bitrate! / 8)
 
     throttleTransformable
       .on('data', (chunk) => this.broadcastToEverySink(chunk))
@@ -81,11 +94,9 @@ class Radio {
 
     songReadable.pipe(throttleTransformable)
 
-    const { album, albumartist, artists, genre, title, year } = currentSong
-
     wsManager.broadcast({
       action: GET_SONG_INFO,
-      payload: { album, albumartist, artists, genre, title, year },
+      payload: { album, albumArtist, artists, genre, title, year, albumArt },
     })
   }
 

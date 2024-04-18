@@ -27,10 +27,10 @@ async function analyzeMusic(file) {
     year: metadata.common.year,
     album: metadata.common.album,
     genre: metadata.common.genre,
-    albumartist: metadata.common.albumartist,
+    albumArtist: metadata.common.albumartist,
     title: metadata.common.title,
     artists: metadata.common.artists,
-    file_location: file,
+    fileLocation: file,
   }
 
   if (formatted.title === '' || !formatted.title) {

@@ -13,13 +13,13 @@ function messageHandler(ws: WebSocket, message: Message) {
   const { action, payload } = message
 
   if (action === GET_SONG_INFO) {
-    const { album, albumartist, artists, genre, title, year } =
+    const { album, albumArtist, artists, genre, title, year, albumArt } =
       Radio.getCurrentSong()
 
     ws.send(
       JSON.stringify({
         action,
-        payload: { album, albumartist, artists, genre, title, year },
+        payload: { album, albumArtist, artists, genre, title, year, albumArt },
       }),
     )
   }
