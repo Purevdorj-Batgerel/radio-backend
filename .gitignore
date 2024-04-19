@@ -32,7 +32,11 @@ dist
 *.tsbuildinfo
 next-env.d.ts
 
+# turborepo
+.turbo
 
+# sqlite dbs
 *.db
 
-public/*.webp
+# generated album arts
+apps/**/public/*.webp
