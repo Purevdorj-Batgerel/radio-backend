@@ -1,5 +1,5 @@
 import DatabaseConstructor, { Database } from 'better-sqlite3'
-import { Song } from './types'
+import { Song } from '@radio/common'
 
 export function getAllSongs(): Song[] {
   const db = getDB()

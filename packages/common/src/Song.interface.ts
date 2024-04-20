@@ -13,8 +13,3 @@ export interface Song {
   albumArt: string
   fileLocation: string
 }
-
-export interface Message {
-  action: string
-  payload: any
-}

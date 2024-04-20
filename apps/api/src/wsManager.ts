@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { WebSocket } from 'ws'
-import { Message } from './types'
+import { Message } from '@radio/common'
 
 let instance: WSManager
 

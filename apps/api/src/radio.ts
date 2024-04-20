@@ -2,7 +2,7 @@ import { createReadStream } from 'fs'
 import { PassThrough } from 'stream'
 import { v4 as uuidv4 } from 'uuid'
 import Throttle from 'throttle'
-import { Song } from './types'
+import { Song } from '@radio/common'
 import wsManager from './wsManager'
 
 import { GET_SONG_INFO } from './actions'

@@ -1,0 +1,13 @@
+{
+  "name": "@radio/common",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@swc/cli": "^0.3.12",
+    "@swc/core": "^1.4.16"
+  }
+}

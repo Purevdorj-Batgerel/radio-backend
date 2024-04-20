@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@radio/api",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -13,6 +13,7 @@
   "dependencies": {
     "@fastify/static": "^7.0.3",
     "@fastify/websocket": "^10.0.1",
+    "@radio/common": "workspace:^",
     "better-sqlite3": "^9.5.0",
     "cwebp": "^3.0.0",
     "dotenv": "^16.4.5",

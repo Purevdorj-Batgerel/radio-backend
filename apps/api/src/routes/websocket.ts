@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { RawData, WebSocket } from 'ws'
-import { Message } from '../types'
+import { Message } from '@radio/common'
 import { GET_SONG_INFO } from '../actions'
 import Radio from '../radio'
 import wsManager from '../wsManager'
