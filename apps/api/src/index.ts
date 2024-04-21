@@ -12,14 +12,15 @@ import { getAllSongs } from './db'
 
 dotenv.config()
 
-if (!process.env.HOST) {
-  throw new Error('PORT not declared in the .env file')
+if (!process.env.API_HOST) {
+  throw new Error('API_HOST not declared in the .env file')
 }
-if (!process.env.PORT) {
-  throw new Error('PORT not declared in the .env file')
+if (!process.env.API_PORT) {
+  throw new Error('API_PORT not declared in the .env file')
 }
 
 const fastify = Fastify({ logger: true })
+
 fastify.register(fastifyStatic, {
   root: path.join(__dirname, '../', 'public'),
   prefix: '/public/',
@@ -30,7 +31,7 @@ fastify.register(websocketHandler)
 fastify.register(streamRouter)
 
 fastify.listen(
-  { host: process.env.HOST, port: parseInt(process.env.PORT) },
+  { host: process.env.API_HOST, port: parseInt(process.env.API_PORT) },
   (err, address) => {
     if (err) {
       console.log(err)
