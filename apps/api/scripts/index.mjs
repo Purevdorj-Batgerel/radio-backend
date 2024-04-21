@@ -1,9 +1,11 @@
-import 'dotenv/config'
+import * as dotenv from 'dotenv'
 
 import path from 'path'
 import { createTables, dropTables, populateSongs } from './db.mjs'
 import { getMusicFiles, processMusicFile } from './musicInfo.mjs'
 import { emptyDir } from './fileHelpers.mjs'
+
+dotenv.config({ path: '../../.env' })
 
 if (!process.env.AUDIO) {
   process.env.AUDIO = path.resolve(process.cwd(), 'sample_audio')
