@@ -1,7 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { RawData, WebSocket } from 'ws'
-import { Message } from '@radio/common'
-import { GET_SONG_INFO } from '../actions'
+import { Message, actions } from '@radio/common'
 import Radio from '../radio'
 import wsManager from '../wsManager'
 
@@ -12,7 +11,7 @@ function toJSON(data: RawData): Message {
 function messageHandler(ws: WebSocket, message: Message) {
   const { action, payload } = message
 
-  if (action === GET_SONG_INFO) {
+  if (action === actions.GET_SONG_INFO) {
     const { album, albumArtist, artists, genre, title, year, albumArt } =
       Radio.getCurrentSong()
 

@@ -5,7 +5,7 @@ import Throttle from 'throttle'
 import { Song } from '@radio/common'
 import wsManager from './wsManager'
 
-import { GET_SONG_INFO } from './actions'
+import { actions } from '@radio/common'
 
 let songs: Song[] = []
 let currentIndex: number = 0
@@ -95,7 +95,7 @@ class Radio {
     songReadable.pipe(throttleTransformable)
 
     wsManager.broadcast({
-      action: GET_SONG_INFO,
+      action: actions.GET_SONG_INFO,
       payload: { album, albumArtist, artists, genre, title, year, albumArt },
     })
   }
