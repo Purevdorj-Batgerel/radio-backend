@@ -26,15 +26,15 @@
     "url": "https://github.com/Purevdorj-Batgerel/radio-backend"
   },
   "license": "UNLICENSED",
-  "packageManager": "pnpm@9.0.4+sha256.caa915eaae9d9aefccf50ee8aeda25a2f8684d8f9d5c6e367eaf176d97c1f89e",
+  "packageManager": "pnpm@9.2.0+sha512.98a80fd11c2e7096747762304106432b3ddc67dcf54b5a8c01c93f68a2cd5e05e6821849522a06fb76284d41a2660d5e334f2ee3bbf29183bf2e739b1dafa771",
   "engines": {
     "node": ">=20.12.2",
     "pnpm": ">=9.0.4"
   },
   "dependencies": {
-    "turbo": "^1.13.2"
+    "turbo": "^2.0.3"
   },
   "devDependencies": {
-    "dotenv-cli": "^7.4.1"
+    "dotenv-cli": "^7.4.2"
   }
 }
