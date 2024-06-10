@@ -55,44 +55,30 @@ class Radio {
     return songs[currentIndex]
   }
 
-  async playLoop() {
-    if (songs.length === 0) {
-      return
-    }
-
-    currentIndex = Math.floor(Math.random() * songs.length)
-    const currentSong = this.getCurrentSong()
-
-    const {
-      album,
-      albumArtist,
-      artists,
-      genre,
-      title,
-      year,
-      albumArt,
-      fileLocation,
-      bitrate,
-    } = currentSong
-
-    // currentIndex++
-
-    // if (currentIndex >= songs.length) {
-    //   currentIndex = 0
-    // }
-
-    // console.log(fileLocation)
-
+  playLoop({ fileLocation, bitrate }: Song) {
     const songReadable = createReadStream(fileLocation)
     const throttleTransformable = new Throttle(bitrate! / 8)
 
     throttleTransformable
       .on('data', (chunk) => this.broadcastToEverySink(chunk))
       .on('end', () => {
-        this.playLoop()
+        this.playNext()
       })
 
     songReadable.pipe(throttleTransformable)
+  }
+
+  playNext() {
+    if (songs.length === 0) {
+      return
+    }
+
+    currentIndex = Math.floor(Math.random() * songs.length)
+    const currentSong = this.getCurrentSong()
+    const { album, albumArtist, artists, genre, title, year, albumArt } =
+      currentSong
+
+    this.playLoop(currentSong)
 
     wsManager.broadcast({
       action: actions.GET_SONG_INFO,
@@ -102,7 +88,7 @@ class Radio {
 
   startStreaming(_songs: Song[] = []) {
     songs = _songs
-    this.playLoop()
+    this.playNext()
   }
 }
 

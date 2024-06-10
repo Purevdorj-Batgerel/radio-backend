@@ -6,12 +6,12 @@ Fastify backend server for audio stream.
 `pnpm dev` - to start everything
 `pnpm --filter @radio/api db` - to init DB
 
-`pnpm exec dotenv -- turbo run dev --scope='@radio/www'` - to start single app
+`pnpm exec turbo run dev --filter=@radio/api` - to start single app
 
 
 ### Helpful commands
 
-`pnpm exec turbo run dev --filter=@radio/api`
+`pnpm install react --filter="@radio/www"
 
 
 ### Helpful reminder

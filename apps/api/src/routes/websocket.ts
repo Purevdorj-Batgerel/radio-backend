@@ -11,16 +11,40 @@ function toJSON(data: RawData): Message {
 function messageHandler(ws: WebSocket, message: Message) {
   const { action, payload } = message
 
-  if (action === actions.GET_SONG_INFO) {
-    const { album, albumArtist, artists, genre, title, year, albumArt } =
-      Radio.getCurrentSong()
+  switch (action) {
+    case actions.GET_SONG_INFO: {
+      const { album, albumArtist, artists, genre, title, year, albumArt } =
+        Radio.getCurrentSong()
 
-    ws.send(
-      JSON.stringify({
-        action,
-        payload: { album, albumArtist, artists, genre, title, year, albumArt },
-      }),
-    )
+      ws.send(
+        JSON.stringify({
+          action,
+          payload: {
+            album,
+            albumArtist,
+            artists,
+            genre,
+            title,
+            year,
+            albumArt,
+          },
+        }),
+      )
+      break
+    }
+    case actions.PLAY_NEXT: {
+      Radio.playNext()
+      break
+    }
+    case actions.PLAY_PREV: {
+      break
+    }
+    default: {
+      console.log(`Unknown action: ${action}`)
+    }
+  }
+
+  if (action === actions.GET_SONG_INFO) {
   }
 }
 
