@@ -9,6 +9,7 @@ import { actions } from '@radio/common'
 
 let songs: Song[] = []
 let currentIndex: number = 0
+let throttleTransformable: Throttle
 
 let instance: Radio
 class Radio {
@@ -55,17 +56,19 @@ class Radio {
     return songs[currentIndex]
   }
 
-  playLoop({ fileLocation, bitrate }: Song) {
+  playSong({ fileLocation, bitrate }: Song) {
     const songReadable = createReadStream(fileLocation)
-    const throttleTransformable = new Throttle(bitrate! / 8)
+    throttleTransformable = new Throttle(bitrate! / 8)
 
     throttleTransformable
       .on('data', (chunk) => this.broadcastToEverySink(chunk))
-      .on('end', () => {
-        this.playNext()
-      })
+      .on('end', () => this.playNext())
 
     songReadable.pipe(throttleTransformable)
+  }
+
+  destroyThrottleTransformable() {
+    throttleTransformable.destroy()
   }
 
   playNext() {
@@ -73,12 +76,16 @@ class Radio {
       return
     }
 
+    if (throttleTransformable) {
+      this.destroyThrottleTransformable()
+    }
+
     currentIndex = Math.floor(Math.random() * songs.length)
     const currentSong = this.getCurrentSong()
     const { album, albumArtist, artists, genre, title, year, albumArt } =
       currentSong
 
-    this.playLoop(currentSong)
+    this.playSong(currentSong)
 
     wsManager.broadcast({
       action: actions.GET_SONG_INFO,
