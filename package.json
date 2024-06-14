@@ -32,6 +32,6 @@
     "pnpm": ">=9.0.4"
   },
   "dependencies": {
-    "turbo": "^2.0.3"
+    "turbo": "^2.0.4"
   }
 }
